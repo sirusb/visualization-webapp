@@ -51,10 +51,8 @@ def history():
 
 @app.get("/allWilayasStats")
 def allWilayasStats():
-    """[summary]
-    
-    Returns:
-        [type] -- [description]
+    """
+    returns statistics about all the 45 willayas
     """
     res = requests.get("https://stats-api.covid19dz.com/wilayas")   
     if res.status_code != 200 :
@@ -64,7 +62,9 @@ def allWilayasStats():
 
 @app.get("/confirmed/wilaya")
 def wilayaWithConfirmedCases():
-    # I will 
+    """
+    returns statistics only about willayas with confirmed cases
+    """
     res = requests.get("https://stats-api.covid19dz.com/wilayas")   
     if res.status_code != 200 :
         msg = { "error" : "Couldn't fetch the data"}
@@ -78,6 +78,9 @@ def wilayaWithConfirmedCases():
 
 @app.get("/active/wilaya")    
 def stillInfectedWilaya():
+    """
+    returns statistics only about willayas who still have hospitalized people
+    """
     res = requests.get("https://stats-api.covid19dz.com/wilayas")   
     if res.status_code != 200 :
         msg = { "error" : "Couldn't fetch the data"}
@@ -89,11 +92,15 @@ def stillInfectedWilaya():
 
     # sort by the number of infected people
     infected = sorted(infected, key = lambda x: x['actives'], reverse=False) 
-    return nfected
+    return infected
 
 
 @app.get("/origins")
 def casesOrigins():
+    """
+    Returns the distribition of cases by origine, basically just calles the stats-api.covid19dz.com
+    This function can be deleted in the future if no additional logic is added.
+    """
     res = requests.get("https://stats-api.covid19dz.com/origins")
     if res.status_code != 200 :
         msg = { "error" : "Couldn't fetch the data"}
@@ -104,6 +111,9 @@ def casesOrigins():
 
 @app.get("/ages")
 def agesdistribution():
+    """
+    Returns statistics about the number of infected people by agao category    
+    """
     res = requests.get("https://stats-api.covid19dz.com/ages")
     if res.status_code != 200 :
         msg = { "error" : "Couldn't fetch the data"}
@@ -117,12 +127,15 @@ def agesdistribution():
         cat_fixes = re.sub("^-","0-",cat)
         cat_fixes = re.sub("^\+70","70+",cat_fixes)
         info2[cat_fixes] = info[cat]    
-    
-    print(info2)
+        
     return info2
 
 @app.get("/sex")
 def casesOrigines():
+    """
+    Returns the distribition of cases by sex, basically just calles the stats-api.covid19dz.com
+    This function can be deleted in the future if no additional logic is added.
+    """
     res = requests.get("https://stats-api.covid19dz.com/sex")
     if res.status_code != 200:
         msg = { "error" : "Couldn't fetch the data"}
